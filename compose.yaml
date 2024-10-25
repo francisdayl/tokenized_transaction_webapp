@@ -28,7 +28,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend/api:/app
+      - ./backend:/app
     command: bash -c "python manage.py makemigrations && python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
