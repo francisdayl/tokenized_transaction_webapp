@@ -30,7 +30,10 @@ class TemporalToken(models.Model):
         )
         if latest_token_qs.exists():
             latest_token: TemporalToken = latest_token_qs.first()
-            if latest_token.is_token_valid():
+            if (
+                latest_token.is_token_valid()
+                and not TokenTransaction.objects.filter(token=latest_token).exists()
+            ):
                 return latest_token
         return None
 
