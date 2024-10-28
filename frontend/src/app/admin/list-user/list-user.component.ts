@@ -2,8 +2,8 @@ import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatTable, MatTableDataSource, MatTableModule} from '@angular/material/table';
-import { RouterLink } from '@angular/router';
-import { UserTokenResponse } from '../../shared/models/auth';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { UserTokenData, UserTokenResponse } from '../../shared/models/auth';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
@@ -14,13 +14,13 @@ import {MatSnackBar} from '@angular/material/snack-bar';
   styleUrl: './list-user.component.css'
 })
 export class ListUserComponent implements OnInit{
-  userTokens: UserTokenResponse[] = [{"username":"Juanito","email":"xdd@xdd.com","tokens":20,"id":1}]
+  userTokens: UserTokenData[] = []
   displayedColumns = ["username","email","tokens","actions"]
 
   private _snackBar = inject(MatSnackBar);
-
+  constructor(private activatedRoute: ActivatedRoute){}
   ngOnInit(): void {
-    // this.activatedRoute.data.subscribe(({ data })=>{this.dataSource = data})
+    this.activatedRoute.data.subscribe(({ data })=>{this.userTokens = data.result})
   }
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action);

@@ -16,11 +16,15 @@ export interface UserLoginData{
     password: string;
 }
 
-export interface UserTokenResponse{
+export interface UserTokenData{
     username: string;
     email: string;
     id: number;
     tokens: number;
+}
+
+export interface UserTokenResponse{
+    result: UserTokenData[];
 }
 
 export interface UsedToken{
@@ -30,6 +34,6 @@ export interface UsedToken{
 }
 
 export interface TokenUserResponse{
-    user_token: UserTokenResponse;
-    token_creation: UsedToken[];
+    username: string;
+    result: UsedToken[];
 }

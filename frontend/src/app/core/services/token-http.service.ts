@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_URL } from '../../shared/constants';
-import { firstValueFrom } from 'rxjs';
-import { User } from '../../shared/models/auth';
+import { firstValueFrom, Observable } from 'rxjs';
+import { TokenUserResponse, User, UserTokenResponse } from '../../shared/models/auth';
 import { TokenResponse } from '../../shared/models/token';
 
 @Injectable({
@@ -24,5 +24,14 @@ export class TokenHttpService {
       throw 'An error occurred during login. Please try again.';
     }
   }
+
+  getUsersListsTokenSummary(): Observable<UserTokenResponse> {
+    return this.httpClient.get<UserTokenResponse>(`${this.tokenHttpServiceUrl}get_users_lists_token_summary/`,{});
+  }
+  
+  getUserTokens(id: number): Observable<TokenUserResponse> {
+    return this.httpClient.post<TokenUserResponse>(`${this.tokenHttpServiceUrl}get_user_tokens/`,{"user_id":id});
+  }
+
 
 }
