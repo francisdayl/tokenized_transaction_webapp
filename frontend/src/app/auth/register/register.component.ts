@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +15,7 @@ export class RegisterComponent {
   registerForm: FormGroup;
   showPassword = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
       email: ['', [
         Validators.required,
@@ -61,9 +62,9 @@ export class RegisterComponent {
     if (this.registerForm.valid) {
       console.log('Form submitted:', this.registerForm.value);
       // Handle form submission here
-      this.authService.registerUser( this.registerForm.value).then(data => {console.log(
-        "XDDD"
-      )})
+      this.authService.registerUser( this.registerForm.value).then(data => 
+       { this.router.navigate(["/login"]);}
+      )
     } else {
       this.markFormGroupTouched(this.registerForm);
     }
