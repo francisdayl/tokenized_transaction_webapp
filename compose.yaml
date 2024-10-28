@@ -22,10 +22,14 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
+    # command: >
+    #   bash -c "python manage.py makemigrations &&
+    #            python manage.py migrate --noinput &&
+    #            daphne -b 0.0.0.0 -p 8000 core.asgi:application"
     command: >
       bash -c "python manage.py makemigrations &&
                python manage.py migrate --noinput &&
-               daphne -b 0.0.0.0 -p 8000 core.asgi:application"
+               python manage.py runserver 0.0.0.0:8000"
     depends_on:
       db:
         condition: service_healthy
@@ -38,20 +42,20 @@ services:
     networks:
       - mynetwork
 
-  celery:
-    container_name: celery_container
-    build:
-      context: ./backend
-    command: celery -A core worker -l INFO
-    volumes:
-      - ./backend:/app
-    depends_on:
-      - redis
-      - backend
-    env_file:
-      - .env
-    networks:
-      - mynetwork
+  # celery:
+  #   container_name: celery_container
+  #   build:
+  #     context: ./backend
+  #   command: celery -A core worker -l INFO
+  #   volumes:
+  #     - ./backend:/app
+  #   depends_on:
+  #     - redis
+  #     - backend
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - mynetwork
 
   # celery-beat:
   #   container_name: celery_beat_container
