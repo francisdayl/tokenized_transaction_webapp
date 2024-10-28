@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { IndexComponent } from './index.component';
+import { TokenHttpComponent } from './token-http.component';
 
-describe('IndexComponent', () => {
-  let component: IndexComponent;
-  let fixture: ComponentFixture<IndexComponent>;
+describe('TokenHttpComponent', () => {
+  let component: TokenHttpComponent;
+  let fixture: ComponentFixture<TokenHttpComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IndexComponent]
+      imports: [TokenHttpComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(IndexComponent);
+    fixture = TestBed.createComponent(TokenHttpComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

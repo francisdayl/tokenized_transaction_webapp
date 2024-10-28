@@ -1,0 +1,81 @@
+<header class="bg-white shadow-md">
+    <nav class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo/Brand -->
+        <div class="flex-shrink-0 flex items-center">
+          <span class="text-xl font-bold text-blue-600">Admin Portal</span>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex space-x-8">
+          <a routerLink="/generate-admin" 
+             routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+             class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+                Admin Page
+          </a>
+          <a routerLink="token-http" 
+             routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+             class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+            Token HTTP
+          </a>
+          <a routerLink="token" 
+             routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+             class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+            Token WebSockets
+          </a>
+          <a routerLink="dashboard" 
+             routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+             class="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+            Use Token
+          </a>
+          <a routerLink="login" 
+             routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+             class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors">
+            Login
+          </a>
+          <button (click)="logout()" 
+                  class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-md hover:bg-gray-700 transition-colors">
+            Logout
+          </button>
+        </div>
+
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+          <button (click)="toggleMobileMenu()" 
+                  class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+            <svg [class.hidden]="isMobileMenuOpen" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg [class.hidden]="!isMobileMenuOpen" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Navigation -->
+      <div [class.hidden]="!isMobileMenuOpen" class="md:hidden">
+        <div class="pt-2 pb-3 space-y-1">
+          <a routerLink="/generate-admin" 
+             routerLinkActive="bg-blue-50 border-l-4 border-blue-600 text-blue-600"
+             class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
+            Generate Admin Page
+          </a>
+          <a routerLink="/token" 
+             routerLinkActive="bg-blue-50 border-l-4 border-blue-600 text-blue-600"
+             class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
+            Token
+          </a>
+          <a routerLink="/use-token" 
+             routerLinkActive="bg-blue-50 border-l-4 border-blue-600 text-blue-600"
+             class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
+            Use Token
+          </a>
+          <button (click)="logout()" 
+                  class="block w-full text-left pl-3 pr-4 py-2 text-base font-medium text-red-600 hover:bg-gray-50 hover:text-red-700 transition-colors">
+            Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>

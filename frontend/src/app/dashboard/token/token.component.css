@@ -1,0 +1,12 @@
+.token-container {
+    text-align: center;
+    padding: 20px;
+  }
+  .token {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 20px 0;
+  }
+  .timer {
+    color: #666;
+  }

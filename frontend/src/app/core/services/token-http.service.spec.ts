@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ErrorService } from './error.service';
+import { TokenHttpService } from './token-http.service';
 
-describe('ErrorService', () => {
-  let service: ErrorService;
+describe('TokenHttpService', () => {
+  let service: TokenHttpService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ErrorService);
+    service = TestBed.inject(TokenHttpService);
   });
 
   it('should be created', () => {

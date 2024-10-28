@@ -1,12 +1,4 @@
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Docker Compose reference guide at
-# https://docs.docker.com/go/compose-spec-reference/
-
-# Here the instructions define your application as a service called "server".
-# This service is built from the Dockerfile in the current directory.
-# You can add other services your application may depend on here, such as a
-# database or a cache. For examples, see the Awesome Compose repository:
-# https://github.com/docker/awesome-compose
+version: '3.8'
 
 services:
   frontend:
@@ -21,6 +13,7 @@ services:
       - ./frontend/src:/app/src
     networks:
       - mynetwork
+
   backend:
     container_name: django_container
     build:
@@ -29,11 +22,53 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
-    command: bash -c "python manage.py makemigrations && python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000"
+    command: >
+      bash -c "python manage.py makemigrations &&
+               python manage.py migrate --noinput &&
+               daphne -b 0.0.0.0 -p 8000 core.asgi:application"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      - DATABASE_URL=postgresql://admin:admin@db:5432/mydb
+      - REDIS_URL=redis://redis:6379/0
     env_file:
       - .env
+    networks:
+      - mynetwork
+
+  celery:
+    container_name: celery_container
+    build:
+      context: ./backend
+    command: celery -A core worker -l INFO
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - redis
+      - backend
+    env_file:
+      - .env
+    networks:
+      - mynetwork
+
+  celery-beat:
+    container_name: celery_beat_container
+    build:
+      context: ./backend
+    command: celery -A core beat -l INFO
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - redis
+      - backend
+    env_file:
+      - .env
+    networks:
+      - mynetwork
+
   db:
     container_name: database_container
     build:
@@ -56,13 +91,27 @@ services:
       start_period: 30s
     networks:
       - mynetwork
-  
-  
+
+  redis:
+    container_name: redis_container
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mynetwork
 
 networks:
   mynetwork:
     driver: bridge
 
 volumes:
-  db_data:
+  postgres_data:
+  redis_data:
 

@@ -1,51 +1,56 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   loginForm: FormGroup;
-  isLoading = false;
-  errorMessage = '';
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
-    this.loginForm = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
+  constructor(private fb: FormBuilder, private authService: AuthService) {
+    this.loginForm = this.fb.group({
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(4)]]
     });
   }
 
-  onSubmit() {
-    if (this.loginForm.invalid) return;
+  ngOnInit(): void {}
 
-    this.isLoading = true;
-    this.errorMessage = '';
-    const { username, password } = this.loginForm.value;
-
-    this.authService.login(username, password)
-      .subscribe({
-        next: () => {
-          this.router.navigate(['/dashboard']);
-        },
-        error: (error) => {
-          this.errorMessage = error;
-          this.isLoading = false;
-        },
-        complete: () => {
-          this.isLoading = false;
-        }
-      });
+  onSubmit(): void {
+    if (this.loginForm.valid) {
+      this.authService.login( this.loginForm.value);
+    } else {
+      this.markFormGroupTouched(this.loginForm);
+    }
   }
+  
+
+  // this.authService.login(this.loginForm.value).subscribe({
+  //   next: () => {
+  //     this.router.navigate(['/dashboard']);
+  //   },
+  //   error: (error) => {
+  //     console.log("Error")
+  //     this.markFormGroupTouched(this.loginForm);
+  //     // this.isLoading = false;
+  //     // this.snackBar.open('Login failed. Please try again.', 'Close', {
+  //     //   duration: 3000
+  //     // });
+  //   }
+  // }) 
+  private markFormGroupTouched(formGroup: FormGroup): void {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
+
 }
