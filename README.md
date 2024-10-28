@@ -1,4 +1,4 @@
-# prueba_tecnica_royaltic
+# Tokenized Transaction Webapp
 Technical test consisting on a Full Stack application with CRUD operations. It is composed by the next components
 
 * Backend - Django rest framework
