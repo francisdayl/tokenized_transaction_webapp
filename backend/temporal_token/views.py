@@ -1,4 +1,5 @@
 from rest_framework import status
+from django.db.models import Count
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
@@ -64,3 +65,45 @@ def save_tokenized_transaction(request):
             {"message": "Invalid Token"}, status=status.HTTP_400_BAD_REQUEST
         )
     return Response({"message": "Bad Request"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_users_lists_token_summary(request):
+    user: User = request.user
+    if user.is_staff:
+        users_with_tokens = User.objects.annotate(
+            tokens=Count("temporaltoken__tokentransaction")
+        ).values("id", "username", "email", "tokens")
+        return Response({"result": list(users_with_tokens)}, status=status.HTTP_200_OK)
+    return Response(
+        {"message": "Bad Request", "result": []}, status=status.HTTP_400_BAD_REQUEST
+    )
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def get_user_tokens(request):
+    user: User = request.user
+    selected_user_id = request.data.get("user_id", None)
+    if selected_user_id and user.is_staff:
+        user = User.objects.get(id=selected_user_id)
+
+        transactions = TokenTransaction.objects.select_related("token").filter(
+            token__owner=user
+        )
+        response_data = [
+            {
+                "token_creation": transaction.token.creation_date.strftime(
+                    "%Y%m%dt%H%M%S"
+                ),
+                "token_number": transaction.token.number,
+                "transaction_url": transaction.transaction_url,
+            }
+            for transaction in transactions
+        ]
+        return Response({"result": list(response_data)}, status=status.HTTP_200_OK)
+
+    return Response(
+        {"message": "Bad Request", "result": []}, status=status.HTTP_400_BAD_REQUEST
+    )
