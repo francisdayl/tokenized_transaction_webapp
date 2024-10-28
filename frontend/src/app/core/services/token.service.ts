@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { API_URL } from '../../shared/constants';
+import { TokenResponse } from '../../shared/models/token';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class TokenService {
-  private tokenSubject = new BehaviorSubject<string>('');
+  private tokenSubject = new BehaviorSubject<TokenResponse | null>(null);
   token$ = this.tokenSubject.asObservable();
   private ws: WebSocket | null = null;
 
@@ -36,15 +37,4 @@ export class TokenService {
       this.ws = null;
     }
   }
-}
-
-
-export class TokenServiceHttp {
-  private tokenSubject = new BehaviorSubject<string>('');
-  token$ = this.tokenSubject.asObservable();
-  private ws: WebSocket | null = null;
-
-  constructor() {}
-
-  
 }

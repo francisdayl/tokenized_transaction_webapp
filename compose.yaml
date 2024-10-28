@@ -32,7 +32,6 @@ services:
       redis:
         condition: service_started
     environment:
-      - DATABASE_URL=postgresql://admin:admin@db:5432/mydb
       - REDIS_URL=redis://redis:6379/0
     env_file:
       - .env
@@ -54,20 +53,20 @@ services:
     networks:
       - mynetwork
 
-  celery-beat:
-    container_name: celery_beat_container
-    build:
-      context: ./backend
-    command: celery -A core beat -l INFO
-    volumes:
-      - ./backend:/app
-    depends_on:
-      - redis
-      - backend
-    env_file:
-      - .env
-    networks:
-      - mynetwork
+  # celery-beat:
+  #   container_name: celery_beat_container
+  #   build:
+  #     context: ./backend
+  #   command: celery -A core beat -l INFO
+  #   volumes:
+  #     - ./backend:/app
+  #   depends_on:
+  #     - redis
+  #     - backend
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - mynetwork
 
   db:
     container_name: database_container
@@ -94,7 +93,7 @@ services:
 
   redis:
     container_name: redis_container
-    image: redis:7-alpine
+    image: redis:alpine
     ports:
       - "6379:6379"
     volumes:
@@ -112,6 +111,6 @@ networks:
     driver: bridge
 
 volumes:
-  postgres_data:
+  db_data:
   redis_data:
 
