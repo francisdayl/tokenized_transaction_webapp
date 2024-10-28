@@ -42,20 +42,20 @@ services:
     networks:
       - mynetwork
 
-  # celery:
-  #   container_name: celery_container
-  #   build:
-  #     context: ./backend
-  #   command: celery -A core worker -l INFO
-  #   volumes:
-  #     - ./backend:/app
-  #   depends_on:
-  #     - redis
-  #     - backend
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - mynetwork
+  celery:
+    container_name: celery_container
+    build:
+      context: ./backend
+    command: celery -A core worker -l INFO
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - redis
+      - backend
+    env_file:
+      - .env
+    networks:
+      - mynetwork
 
   # celery-beat:
   #   container_name: celery_beat_container
